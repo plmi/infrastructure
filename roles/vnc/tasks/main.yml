@@ -1,0 +1,32 @@
+---
+- name: install tigervnc server
+  become: true
+  pacman:
+    name: "tigervnc"
+    state: present
+
+- name: create x0vncserver service
+  become: true
+  template:
+    src: x0vncserver.service.jinja
+    dest: "/etc/systemd/system/x0vncserver.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure systemd rereads confiuration files
+  become: true
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+    
+- name: enable service x0vncserver.service
+  become: true
+  ansible.builtin.systemd_service:
+    name: x0vncserver.service
+    enabled: true
+
+- name: start service x0vncserver.service
+  become: true
+  ansible.builtin.systemd_service:
+    name: x0vncserver.service
+    state: restarted
