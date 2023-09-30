@@ -1,0 +1,54 @@
+---
+- name: delete directories
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ dwm_temp_directory }}"
+    - "{{ dwm_directory }}"
+
+- name: create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ dwm_temp_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: checkout dwm
+  git:
+    repo: https://github.com/bakkeby/dwm-flexipatch.git
+    dest: "{{ dwm_temp_directory }}"
+
+- name: add patches
+  command: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ dwm_temp_directory }}/patches.def.h
+  with_items: "{{ dwm_patches }}"
+
+# https://github.com/bakkeby/dwm-flexipatch/issues/72
+- name: update config.mk if swallow patch enabled
+  command: sed -i '/XCBLIBS/s/^#//g' {{ dwm_temp_directory }}/config.mk
+  when: "'SWALLOW_PATCH' in {{ dwm_patches }}"
+
+- name: compile dwm
+  command: make
+  args:
+    chdir: "{{ dwm_temp_directory }}"
+
+- name: checkout flexipatch-finalizer
+  git:
+    repo: https://github.com/bakkeby/flexipatch-finalizer.git
+    dest: "{{ flexipatch_finalizer_directory }}"
+
+- name: finalize dwm
+  command: "./flexipatch-finalizer.sh -r -d {{ dwm_temp_directory }} -o {{ dwm_directory }}"
+  args:
+    chdir: "{{ flexipatch_finalizer_directory }}"
+
+- name: install dwm
+  become: true
+  command: make clean install
+  args:
+    chdir: "{{ dwm_directory }}"
+
+- name: delete dwm temp directory
+  ansible.builtin.file:
+    state: absent
+    path: "{{ dwm_temp_directory }}"

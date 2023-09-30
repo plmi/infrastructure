@@ -1,0 +1,13 @@
+---
+- name: install anki build dependencies
+  become: true
+  pacman:
+    name: "{{ anki_dependencies }}"
+    state: present
+
+- name: install anki
+  become_user: yaybuilder
+  become: true
+  kewlfft.aur.aur:
+    use: yay
+    name: "anki-official-binary-bundle"

@@ -1,0 +1,10 @@
+---
+- name: Apply netplan config
+  command:
+    cmd: netplan apply
+
+- name: Remove yay build folder
+  become: true
+  ansible.builtin.file:
+    state: absent
+    path: "{{ yay_directory }}"

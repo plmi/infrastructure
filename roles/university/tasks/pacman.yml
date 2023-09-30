@@ -1,0 +1,7 @@
+---
+- name: install packages
+  become: true
+  pacman:
+    name: "{{ university_packages }}"
+  state: present
+  update_cache: true

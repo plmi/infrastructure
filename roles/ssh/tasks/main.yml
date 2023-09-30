@@ -1,0 +1,25 @@
+---
+  - name: Install OpenSSH
+    become: true
+    pacman:
+      name: openssh
+      state: present
+      update_cache: true
+
+  - name: Enable and start sshd service
+    systemd:
+      name: sshd
+      state: started
+      enabled: true
+
+  - name: create ssh directory if it does not exist
+    ansible.builtin.file:
+      path: "/home/{{ username }}/.ssh"
+      state: directory
+      mode: '0755'
+
+  - name: Add ssh config
+    template:
+      src: config.jinja2
+      dest: "/home/{{ username }}/.ssh/config"
+      mode: 0644

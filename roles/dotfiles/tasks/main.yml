@@ -1,0 +1,32 @@
+---
+- name: checkout dotfiles
+  git:
+    repo: https://github.com/plmi/dotfiles.git
+    dest: "{{ dotfiles_directory }}"
+
+- name: install dotfiles
+  command: make
+  args:
+    chdir: "{{ dotfiles_directory }}"
+
+- name: create xsession directory if it does not exist
+  become: true
+  ansible.builtin.file:
+    path: /usr/share/xsessions
+    state: directory
+    mode: '0755'
+
+- name: add dwm shortcut
+  become: true
+  ansible.builtin.copy:
+    src: "{{ dotfiles_directory }}/dwm.desktop"
+    dest: /usr/share/xsessions/dwm.desktop
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    mode: '0644'
+
+- name: change default shell of {{ username }}
+  become: yes
+  user:
+    name: "{{ username }}"
+    shell: "{{ shell }}"

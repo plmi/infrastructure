@@ -1,0 +1,68 @@
+---
+- name: create user
+  become: true 
+  ansible.builtin.user:
+    name: yaybuilder
+    state: present
+  # notify: Remove user yaybuilder
+
+- name: grant sudo powers to builder
+  become: true
+  community.general.sudoers:
+    name: yaybuilder
+    user: yaybuilder
+    commands: ALL
+    nopassword: true
+
+- name: create a directory if it does not exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ yay_directory }}"
+    owner: yaybuilder
+    group: yaybuilder
+    state: directory
+    mode: '0755'
+
+- name: install build dependencies
+  become: true
+  pacman:
+    name: "{{ yay_dependencies }}"
+    state: present
+
+- name: clone yay
+  become_user: yaybuilder
+  become: true
+  git:
+    repo: https://aur.archlinux.org/yay-bin.git
+    dest: "{{ yay_directory }}"
+    update: true
+
+- name: build and install yay
+  become: true
+  become_user: yaybuilder
+  command:
+    chdir: "{{ yay_directory }}"
+    cmd: "makepkg -sfi --noconfirm"
+    creates: /usr/bin/yay
+  notify: Remove yay build folder
+
+- name: create the `aur_builder` user
+  become: yes
+  ansible.builtin.user:
+    name: aur_builder
+    create_home: yes
+    group: wheel
+
+- name: allow the `aur_builder` user to run `sudo pacman` without a password
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/11-install-aur_builder
+    line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+    create: yes
+    mode: 0644
+    validate: 'visudo -cf %s'
+
+- name: install yay packages
+  kewlfft.aur.aur:
+    use: yay
+    name: "nerd-fonts-jetbrains-mono"

@@ -1,0 +1,24 @@
+[connection]
+id=wired
+uuid={{ interface_uuid.stdout }}
+type=ethernet
+autoconnect-priority=-999
+interface-name={{ network.interface }}
+permissions=
+timestamp=1640800022
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+address1={{ network.ip }}/24,192.168.8.1
+dns={{ network.gateway }}
+dns-search=
+method=manual
+
+[ipv6]
+addr-gen-mode=eui64
+dns-search=
+method=ignore
+
+[proxy]

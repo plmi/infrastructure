@@ -1,0 +1,123 @@
+common_packages:
+  - aria2
+  - browserpass
+  - browserpass-chromium
+  - code
+  - dhcpcd 
+  - dunst
+  - eza
+  - flameshot
+  - git
+  - inetutils
+  - inotify-tools
+  - iperf3
+  - maim
+  - mpv
+  - neofetch
+  - net-tools
+  - netctl
+  - okular
+  - openssh
+  - openvpn
+  - p7zip
+  - pacman-contrib
+  - pass
+  - redshift
+  - speedtest-cli
+  - stow
+  - sxiv
+  - thunderbird
+  - tmux
+  - unzip
+  - wget
+  - xclip
+  - xorg-server
+  - xorg-xinit
+  - xorg-xsetroot
+  - xwallpaper
+  - yt-dlp
+  - zathura
+  - zathura-pdf-mupdf
+  - zip
+  - zoxide
+  - zsh
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+
+blackarch_packages:
+  - nmap
+  - burpsuite
+  - metasploit
+
+university_packages:
+  - gimp
+  - textlive-most
+
+yay_packages:
+  - nerd-fonts-jetbrains-mono 
+  - anki-official-binary-bundle
+
+anki_dependencies:
+  - libxcb
+  - xcb-util-wm
+  - xcb-util-keysyms
+  - xcb-util-renderutil
+
+yay_dependencies:
+  - git
+  - base-devel
+
+pyenv_dependencies:
+  - base-devel
+  - openssl
+  - zlib
+  - xz
+  - tk
+
+dwm_patches:
+  - SCRATCHPAD_ALT_1_PATCH
+  - SWALLOW_PATCH
+  - BAR_SYSTRAY_PATCH
+  - FAKEFULLSCREEN_PATCH
+  - PERTAG_PATCH
+
+st_patches:
+  - BOLD_IS_NOT_BRIGHT_PATCH
+
+docker:
+  group: docker
+  packages:
+  - docker
+  - docker-compose
+
+network:
+  name: lan
+  cidr: 192.168.8.0/24
+  gateway: 192.168.8.1
+  ip: 192.168.8.102
+  interface: ens18
+  dns1: 1.1.1.1
+  dns2: 8.8.8.8
+
+ssh:
+  hosts:
+    - hostname: artemis
+      ip: 192.168.8.114
+    - hostname: demeter
+      ip: 192.168.8.118
+    - hostname: gaia
+      ip: 192.168.8.101
+
+timezone: Europe/Berlin
+username: michael
+shell: /usr/bin/zsh
+yay_directory: "/tmp/yay"
+pyenv_directory: "/home/{{ username }}/.pyenv"
+st_temp_directory: "/home/{{ username }}/.local/src/st.tmp"
+st_directory: "/home/{{ username }}/.local/src/st"
+dotfiles_directory: "/home/{{ username }}/dotfiles"
+dwm_directory: "/home/{{ username }}/.local/src/dwm"
+dwm_temp_directory: "/home/{{ username }}/.local/src/dwm.tmp"
+public_key_name: "homeserver"
+grub_config: /etc/default/grub
+flexipatch_finalizer_directory: "/home/{{ username }}/.local/src/flexipatch-finalizer"

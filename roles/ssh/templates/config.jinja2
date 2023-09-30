@@ -1,0 +1,10 @@
+Host *
+  User {{ username }}
+  Port 22
+  IdentityFile /home/{{ username }}/.ssh/{{ public_key_name }}
+
+{% for host in ssh.hosts %}
+Host {{ host.ip }}
+HostName {{ host.hostname }}
+
+{% endfor %}

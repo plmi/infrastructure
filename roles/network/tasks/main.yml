@@ -1,0 +1,19 @@
+---
+- name: get interface uuid
+  shell: nmcli connection show | grep -v lo | tail -n +2 | awk '{print $4}'
+  register: interface_uuid
+
+- name: get connection name
+  # match string in front of a guid
+  # trim whitespaces with awk
+  shell: nmcli connection show | grep -v lo | tail -n +2 | grep -Po '.*?(?=[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})' | awk '{$1=$1};1'
+  register: connection_name
+
+- name: create networkmanager config
+  become: true
+  template:
+    src: wired.jinja2
+    dest: "/etc/NetworkManager/system-connections/{{ network.interface }}.nmconnection"
+    owner: root
+    group: root
+    mode: 0600

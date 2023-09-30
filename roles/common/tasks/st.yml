@@ -1,0 +1,49 @@
+---
+- name: delete directories
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ st_temp_directory }}"
+    - "{{ st_directory }}"
+
+- name: create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ st_temp_directory }}"
+    state: directory
+    mode: '0755'
+
+- name: checkout st
+  git:
+    repo: https://github.com/bakkeby/st-flexipatch.git
+    dest: "{{ st_temp_directory }}"
+
+- name: add patches
+  shell: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ st_temp_directory }}/patches.def.h
+  with_items: "{{ st_patches }}"
+
+- name: compile st
+  command: make
+  args:
+    chdir: "{{ st_temp_directory }}"
+
+- name: checkout flexipatch-finalizer
+  git:
+    repo: https://github.com/bakkeby/flexipatch-finalizer.git
+    dest: "{{ flexipatch_finalizer_directory }}"
+
+- name: finalize st
+  command: "./flexipatch-finalizer.sh -r -d {{ st_temp_directory }} -o {{ st_directory }}"
+  args:
+    chdir: "{{ flexipatch_finalizer_directory }}"
+
+- name: install st
+  become: true
+  command: make clean install
+  args:
+    chdir: "{{ st_directory }}"
+
+- name: delete st temp directory
+  ansible.builtin.file:
+    state: absent
+    path: "{{ st_temp_directory }}"
