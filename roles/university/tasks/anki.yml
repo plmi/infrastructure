@@ -5,9 +5,17 @@
     name: "{{ anki.dependencies }}"
     state: present
 
-- name: install anki
-  become_user: yaybuilder
+- name: copy download script
+  copy:
+    src: "{{ anki.script }}"
+    dest: "{{ anki.script_dest }}"
+    mode: '0755'
+
+- name: execute download script
+  shell: "{{ anki.script_dest }}/{{ anki.script }}"
+
+- name: execute download script
   become: true
-  kewlfft.aur.aur:
-    use: yay
-    name: " {{ anki.aur }}"
+  shell: "{{ anki.dest }}/install.sh"
+  args:
+    chdir: "{{ anki.dest }}/"

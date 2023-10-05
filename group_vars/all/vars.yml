@@ -173,13 +173,15 @@ ssh:
       ip: 192.168.8.101
 
 anki:
-  aur:
-    - anki-official-binary-bundle
+  script: download-anki.sh
+  script_dest: "/home/{{ username }}/.local/src"
+  dest: "/home/{{ username }}/.local/src/anki"
   dependencies:
     - libxcb
     - xcb-util-wm
     - xcb-util-keysyms
     - xcb-util-renderutil
+    - qt6-base
 
 pyenv:
   repo: https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer
