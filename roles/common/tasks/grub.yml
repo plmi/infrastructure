@@ -1,8 +1,6 @@
 ---
 - name: configure grub
-  become: true
-  command: sed -i '/#GRUB_DISABLE_OS_PROBER/s/.*/GRUB_DISABLE_OS_PROBER=true/' {{ grub_config }}
+  command: sed -i '/#GRUB_DISABLE_OS_PROBER/s/.*/GRUB_DISABLE_OS_PROBER=true/' {{ grub.config }}
 
 - name: update grub config
-  become: true
   command: grub-mkconfig -o /boot/grub/grub.cfg

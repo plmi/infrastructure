@@ -17,7 +17,7 @@
 - name: create a directory if it does not exist
   become: true
   ansible.builtin.file:
-    path: "{{ yay_directory }}"
+    path: "{{ yay.dest }}"
     owner: yaybuilder
     group: yaybuilder
     state: directory
@@ -26,7 +26,7 @@
 - name: install build dependencies
   become: true
   pacman:
-    name: "{{ yay_dependencies }}"
+    name: "{{ yay.dependencies }}"
     state: present
 
 - name: clone yay
@@ -34,14 +34,14 @@
   become: true
   git:
     repo: https://aur.archlinux.org/yay-bin.git
-    dest: "{{ yay_directory }}"
+    dest: "{{ yay.dest }}"
     update: true
 
 - name: build and install yay
   become: true
   become_user: yaybuilder
   command:
-    chdir: "{{ yay_directory }}"
+    chdir: "{{ yay.dest }}"
     cmd: "makepkg -sfi --noconfirm"
     creates: /usr/bin/yay
   notify: Remove yay build folder
@@ -63,6 +63,8 @@
     validate: 'visudo -cf %s'
 
 - name: install yay packages
+  become_user: yaybuilder
+  become: true
   kewlfft.aur.aur:
     use: yay
     name: "nerd-fonts-jetbrains-mono"

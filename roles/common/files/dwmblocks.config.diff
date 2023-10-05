@@ -1,0 +1,36 @@
+diff --git a/config.c b/config.c
+index 991bae3..a03a439 100644
+--- a/config.c
++++ b/config.c
+@@ -4,16 +4,10 @@
+ #include "util.h"
+ 
+ Block blocks[] = {
+-    {"sb-mail",    600,  1 },
+-    {"sb-music",   0,    2 },
+-    {"sb-disk",    1800, 3 },
+-    {"sb-memory",  10,   4 },
+-    {"sb-loadavg", 5,    5 },
+-    {"sb-mic",     0,    6 },
+-    {"sb-record",  0,    7 },
+-    {"sb-volume",  0,    8 },
+-    {"sb-battery", 5,    9 },
+-    {"sb-date",    1,    10},
++    { "sb-disk",    10,   1 },
++    { "sb-network", 30,   2 },
++    { "sb-uptime",  60,   3 },
++    { "sb-date",     5,   4 },
+ };
+ 
+ const unsigned short blockCount = LEN(blocks);
+diff --git a/config.h b/config.h
+index 235ee71..66aae0b 100644
+--- a/config.h
++++ b/config.h
+@@ -2,5 +2,5 @@
+ 
+ #define CLICKABLE_BLOCKS  1     // Enable clickability for blocks
+ #define CMDLENGTH         45    // Trim block output to this length
+-#define DELIMITER         "  "  // Delimiter string used to separate blocks
++#define DELIMITER         " | " // Delimiter string used to separate blocks
+ #define LEADING_DELIMITER 0     // Whether a leading separator should be used

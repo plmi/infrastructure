@@ -1,16 +1,16 @@
 ---
 - name: check if pyenv exists
   ansible.builtin.stat:
-    path: "{{ pyenv_directory }}"
+    path: "{{ pyenv.dest }}"
   register: pyenv_directory
 
 - name: install pyenv build dependencies
   become: true
   pacman:
-    name: "{{ pyenv_dependencies }}"
+    name: "{{ pyenv.dependencies }}"
     state: present
   when: not pyenv_directory.stat.exists
 
 - name: install pyenv
-  shell: curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+  shell: curl -L {{ pyenv.repo }} | bash
   when: not pyenv_directory.stat.exists

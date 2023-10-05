@@ -1,0 +1,34 @@
+---
+- name: delete dwmblocks directory
+  become: true
+  ansible.builtin.file:
+    state: absent
+    path: "{{ dwmblocks.dest }}"
+
+- name: checkout dwmblocks-async
+  git:
+    repo: "{{ dwmblocks.repository }}"
+    dest: "{{ dwmblocks.dest }}"
+
+- name: apply diff files
+  patch:
+    src: "{{ item }}"
+    basedir: "{{ dwmblocks.dest }}"
+    strip: 1
+  with_items: "{{ dwmblocks.diffs }}"
+
+- name: "copy blocks to {{ dwmblocks.blocks.dest }}"
+  become: true
+  copy:
+    src: "{{ item }}"
+    dest: "{{ dwmblocks.blocks.dest }}"
+    owner: root
+    group: root
+    mode: '0755'
+  with_fileglob: "{{ dwmblocks.blocks.glob1 }}"
+
+- name: install
+  become: true
+  command: make install
+  args:
+    chdir: "{{ dwmblocks.dest }}"

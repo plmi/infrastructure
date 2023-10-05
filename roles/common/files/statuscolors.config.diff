@@ -1,0 +1,91 @@
+diff --git a/config.h b/config.h
+index 84d01b5..3efdea6 100644
+--- a/config.h
++++ b/config.h
+@@ -19,55 +19,56 @@ static const char dmenufont[]            = "monospace:size=10";
+ 
+ static char c000000[]                    = "#000000"; // placeholder value
+ 
+-static char normfgcolor[]                = "#bbbbbb";
+-static char normbgcolor[]                = "#222222";
+-static char normbordercolor[]            = "#444444";
++static char normfgcolor[]                = "#ffffff";
++static char normbgcolor[]                = "#121212";
++static char normbordercolor[]            = "#212121";
+ static char normfloatcolor[]             = "#db8fd9";
+ 
+-static char selfgcolor[]                 = "#eeeeee";
+-static char selbgcolor[]                 = "#005577";
+-static char selbordercolor[]             = "#005577";
++static char selfgcolor[]                 = "#e0e0e0";
++static char selbgcolor[]                 = "#121212";
++static char selbordercolor[]             = "#696969";
+ static char selfloatcolor[]              = "#005577";
+ 
+-static char titlenormfgcolor[]           = "#bbbbbb";
+-static char titlenormbgcolor[]           = "#222222";
+-static char titlenormbordercolor[]       = "#444444";
++static char titlenormfgcolor[]           = "#ffffff";
++static char titlenormbgcolor[]           = "#121212";
++static char titlenormbordercolor[]       = "#212121";
+ static char titlenormfloatcolor[]        = "#db8fd9";
+ 
+-static char titleselfgcolor[]            = "#eeeeee";
+-static char titleselbgcolor[]            = "#005577";
+-static char titleselbordercolor[]        = "#005577";
++static char titleselfgcolor[]            = "#ffffff";
++static char titleselbgcolor[]            = "#121212";
++static char titleselbordercolor[]        = "#212121";
+ static char titleselfloatcolor[]         = "#005577";
+ 
+-static char tagsnormfgcolor[]            = "#bbbbbb";
+-static char tagsnormbgcolor[]            = "#222222";
+-static char tagsnormbordercolor[]        = "#444444";
++static char tagsnormfgcolor[]            = "#ffffff";
++static char tagsnormbgcolor[]            = "#121212";
++static char tagsnormbordercolor[]        = "#212121";
+ static char tagsnormfloatcolor[]         = "#db8fd9";
+ 
+-static char tagsselfgcolor[]             = "#eeeeee";
+-static char tagsselbgcolor[]             = "#005577";
+-static char tagsselbordercolor[]         = "#005577";
++static char tagsselfgcolor[]             = "#cf4f88";
++static char tagsselbgcolor[]             = "#121212";
++static char tagsselbordercolor[]         = "#212121";
+ static char tagsselfloatcolor[]          = "#005577";
+ 
+-static char hidnormfgcolor[]             = "#005577";
+-static char hidselfgcolor[]              = "#227799";
+-static char hidnormbgcolor[]             = "#222222";
++static char hidnormfgcolor[]             = "#47959e";
++static char hidnormbgcolor[]             = "#212121";
++
++static char hidselfgcolor[]              = "#121212";
+ static char hidselbgcolor[]              = "#222222";
+ 
+-static char urgfgcolor[]                 = "#bbbbbb";
+-static char urgbgcolor[]                 = "#222222";
+-static char urgbordercolor[]             = "#ff0000";
++static char urgfgcolor[]                 = "#ffffff";
++static char urgbgcolor[]                 = "#121212";
++static char urgbordercolor[]             = "#212121";
+ static char urgfloatcolor[]              = "#db8fd9";
+ 
+-static char scratchselfgcolor[]          = "#FFF7D4";
++static char scratchselfgcolor[]          = "#fff7d4";
+ static char scratchselbgcolor[]          = "#77547E";
+-static char scratchselbordercolor[]      = "#894B9F";
+-static char scratchselfloatcolor[]       = "#894B9F";
++static char scratchselbordercolor[]      = "#cf4f88";
++static char scratchselfloatcolor[]       = "#cf4f88";
+ 
+-static char scratchnormfgcolor[]         = "#FFF7D4";
++static char scratchnormfgcolor[]         = "#fff7d4";
+ static char scratchnormbgcolor[]         = "#664C67";
+-static char scratchnormbordercolor[]     = "#77547E";
+-static char scratchnormfloatcolor[]      = "#77547E";
++static char scratchnormbordercolor[]     = "#cf4f88";
++static char scratchnormfloatcolor[]      = "#cf4f88";
+ 
+ 
+ 

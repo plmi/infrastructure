@@ -1,0 +1,9 @@
+---
+- name: install man pages
+  pacman:
+    name: "{{ man.pacman }}"
+    state: present
+    update_cache: true
+
+- name: initialize man-db
+  command: mandb

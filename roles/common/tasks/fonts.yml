@@ -1,0 +1,7 @@
+---
+- name: install fonts from official repositories
+  become: true
+  pacman:
+    name: "{{ fonts.pacman }}"
+    state: present
+    update_cache: true

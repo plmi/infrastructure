@@ -1,0 +1,38 @@
+---
+- name: delete directories
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ tabbed.build_dest }}"
+    - "{{ tabbed.dest }}"
+
+- name: checkout tabbed
+  git:
+    repo: "{{ tabbed.repository }}"
+    dest: "{{ tabbed.build_dest }}"
+
+- name: add patches
+  shell: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ tabbed.build_dest }}/patches.def.h
+  with_items: "{{ tabbed.patches }}"
+
+- name: compile tabbed
+  command: make
+  args:
+    chdir: "{{ tabbed.build_dest }}"
+
+- name: checkout flexipatch-finalizer
+  git:
+    repo: https://github.com/bakkeby/flexipatch-finalizer.git
+    dest: "{{ flexipatch_finalizer.dest }}"
+
+- name: finalize tabbed
+  command: "./flexipatch-finalizer.sh -r -d {{ tabbed.build_dest }} -o {{ tabbed.dest }}"
+  args:
+    chdir: "{{ flexipatch_finalizer.dest }}"
+
+- name: install
+  become: true
+  command: make clean install
+  args:
+    chdir: "{{ tabbed.dest }}"

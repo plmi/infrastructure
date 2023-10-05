@@ -1,13 +1,11 @@
 ---
 - name: install docker packages
-  become: true
   pacman:
     name: "{{ docker.packages }}"
     state: present
     update_cache: true
 
 - name: add {{ username }} to {{ docker.group }} group
-  become: true
   user:
     name: "{{ username }}"
     groups: "{{ docker.group }}"

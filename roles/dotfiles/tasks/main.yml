@@ -2,12 +2,13 @@
 - name: checkout dotfiles
   git:
     repo: https://github.com/plmi/dotfiles.git
-    dest: "{{ dotfiles_directory }}"
+    dest: "{{ dotfiles.dest }}"
+    force: true
 
 - name: install dotfiles
   command: make
   args:
-    chdir: "{{ dotfiles_directory }}"
+    chdir: "{{ dotfiles.dest }}"
 
 - name: create xsession directory if it does not exist
   become: true
@@ -19,7 +20,7 @@
 - name: add dwm shortcut
   become: true
   ansible.builtin.copy:
-    src: "{{ dotfiles_directory }}/dwm.desktop"
+    src: "{{ dotfiles.dest }}/dwm.desktop"
     dest: /usr/share/xsessions/dwm.desktop
     owner: "{{ username }}"
     group: "{{ username }}"
@@ -30,3 +31,5 @@
   user:
     name: "{{ username }}"
     shell: "{{ shell }}"
+
+- include_tasks: bat.yml

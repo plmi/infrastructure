@@ -1,0 +1,130 @@
+diff --git a/config.h b/config.h
+index 581a919..84d01b5 100644
+--- a/config.h
++++ b/config.h
+@@ -89,7 +89,6 @@ static char *colors[][ColCount] = {
+ 
+ 
+ 
+-static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
+ 
+ /* Tags
+  * In a traditional dwm the number of tags in use can be changed simply by changing the number
+@@ -120,9 +119,9 @@ static const char *scratchpadcmd[] = {"s", "st", "-n", "spterm", NULL};
+  */
+ static char *tagicons[][NUMTAGS] =
+ {
+-	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+-	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
+-	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
++	[DEFAULT_TAGS]        = { "base", "web", "term", "mail" },
++	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D" },
++	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>" },
+ };
+ 
+ 
+@@ -155,9 +154,13 @@ static const Rule rules[] = {
+ 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
+ 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
+ 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
+-	RULE(.class = "Gimp", .tags = 1 << 4)
+-	RULE(.class = "Firefox", .tags = 1 << 7)
+-	RULE(.instance = "spterm", .scratchkey = 's', .isfloating = 1)
++	RULE(.class = "Anki", .title = "Add", .isfloating = 1)
++	RULE(.class = "thunderbird", .tags = 1 << 3)
++	RULE(.class = "Chromium", .instance = "chromium", .tags = 1 << 1)
++	RULE(.class = "mpv", .isfloating = 1 )
++	RULE(.class = "pinentry-qt", .isfloating = 1)
++	RULE(.class = "Sxiv", .isfloating = 1 )
++	RULE(.instance = "scratchpad", .scratchkey = 's', .isfloating = 1, .iscentered = 1)
+ };
+ 
+ 
+@@ -192,8 +195,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
+ 
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+-	{ "[]=",      tile },    /* first entry is default */
+-	{ "><>",      NULL },    /* no layout function means floating behavior */
++	{ "[T]",      tile },    /* first entry is default */
++	{ "[F]",      NULL },    /* no layout function means floating behavior */
+ 	{ "[M]",      monocle },
+ };
+ 
+@@ -213,24 +216,31 @@ static const Layout layouts[] = {
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+-static const char *dmenucmd[] = {
+-	"dmenu_run",
+-	"-m", dmenumon,
+-	"-fn", dmenufont,
+-	"-nb", normbgcolor,
+-	"-nf", normfgcolor,
+-	"-sb", selbgcolor,
+-	"-sf", selfgcolor,
+-	NULL
+-};
++static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor,
++	                                "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
+ static const char *termcmd[]  = { "st", NULL };
++static const char *tmuxcmd[] = { "urxvtc", "-title", "tmux", "-e", "tmux", "-f", "/home/michael/.tmux.conf", NULL };
++static const char *lockcmd[] = { "xautolock", "-locknow", NULL };
++static const char *rebootcmd[] = { "systemctl", "reboot", NULL };
++static const char *shutcmd[] = { "systemctl", "poweroff", NULL };
++//static const char *scratchpadcmd[] = { "st", "-t", "scratchpad", "-g", "120x34", NULL };
++static const char *screenshotcmd[] = { "screenshot.sh", "-s", NULL };
++static const char *scratchpadcmd[] = {"s", "st", "-n", "scratchpad", "-g", "120x34", NULL};
+ 
+ 
+ 
+ static const Key keys[] = {
+ 	/* modifier                     key            function                argument */
+ 	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
+-	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
++	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
++	{ MODKEY,                       XK_space,      togglescratch,          {.v = scratchpadcmd } },
++	{ MODKEY|ControlMask,           XK_space,      setscratch,             {.v = scratchpadcmd } },
++	{ MODKEY|ShiftMask,             XK_space,      removescratch,          {.v = scratchpadcmd } },
++	{ MODKEY|ShiftMask,             XK_l,          spawn,                  {.v = lockcmd } },
++	{ MODKEY|ShiftMask,             XK_r,          spawn,                  {.v = rebootcmd } },
++	{ MODKEY|ShiftMask,             XK_q,          spawn,                  {.v = shutcmd } },
++	{ MODKEY|ShiftMask,             XK_t,          spawn,                  {.v = tmuxcmd } },
++	{ MODKEY|ShiftMask,             XK_s,          spawn,                  {.v = screenshotcmd } },
+ 	{ MODKEY,                       XK_b,          togglebar,              {0} },
+ 	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
+ 	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
+@@ -240,16 +250,13 @@ static const Key keys[] = {
+ 	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
+ 	{ MODKEY,                       XK_Return,     zoom,                   {0} },
+ 	{ MODKEY,                       XK_Tab,        view,                   {0} },
+-	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
+-	{ MODKEY|ShiftMask,             XK_q,          quit,                   {0} },
++	{ MODKEY,                       XK_q,          killclient,             {0} },
++	{ MODKEY|ShiftMask,             XK_c,          quit,                   {0} },
+ 	{ MODKEY,                       XK_t,          setlayout,              {.v = &layouts[0]} },
+ 	{ MODKEY,                       XK_f,          setlayout,              {.v = &layouts[1]} },
+ 	{ MODKEY,                       XK_m,          setlayout,              {.v = &layouts[2]} },
+-	{ MODKEY,                       XK_space,      setlayout,              {0} },
+-	{ MODKEY|ShiftMask,             XK_space,      togglefloating,         {0} },
+-	{ MODKEY,                       XK_grave,      togglescratch,          {.v = scratchpadcmd } },
+-	{ MODKEY|ControlMask,           XK_grave,      setscratch,             {.v = scratchpadcmd } },
+-	{ MODKEY|ShiftMask,             XK_grave,      removescratch,          {.v = scratchpadcmd } },
++	{ MODKEY,                       XK_grave,      setlayout,              {0} },
++	{ MODKEY|ShiftMask,             XK_grave,      togglefloating,         {0} },
+ 	{ MODKEY,                       XK_0,          view,                   {.ui = ~0 } },
+ 	{ MODKEY|ShiftMask,             XK_0,          tag,                    {.ui = ~0 } },
+ 	{ MODKEY,                       XK_comma,      focusmon,               {.i = -1 } },
+diff --git a/dwm.c b/dwm.c
+index 574246e..cdca84c 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -54,7 +54,7 @@
+ #define Button7                 7
+ #define Button8                 8
+ #define Button9                 9
+-#define NUMTAGS                 9
++#define NUMTAGS                 4
+ #define NUMVIEWHIST             NUMTAGS
+ #define BARRULES                20
+ #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)

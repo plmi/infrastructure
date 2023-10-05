@@ -1,0 +1,27 @@
+---
+- name: get bat configuration directory
+  command: bat --config-dir
+  register: bat_configuration_directory
+
+- name: create bat theme directory
+  ansible.builtin.file:
+    path: "{{ bat_configuration_directory.stdout }}/themes"
+    state: directory
+    mode: '0755'
+
+- name: checkout bat catppuccin themes
+  git:
+    repo: https://github.com/catppuccin/bat.git
+    dest: "{{ bat.temp_dest }}"
+
+- name: copy themes to destination
+  copy:
+    src: "{{ item }}"
+    dest: "{{ bat_configuration_directory.stdout }}/themes/"
+  with_fileglob:
+  - "{{ bat.temp_dest }}/*.tmTheme"
+
+- name: delete temporary theme folder
+  ansible.builtin.file:
+    state: absent
+    path: "{{ bat.temp_dest }}"

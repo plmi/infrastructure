@@ -1,0 +1,27 @@
+diff --git a/config.h b/config.h
+index a6a2eab..93819cb 100644
+--- a/config.h
++++ b/config.h
+@@ -238,9 +238,9 @@ static MouseShortcut mshortcuts[] = {
+ #define MODKEY Mod1Mask
+ #define TERMMOD (ControlMask|ShiftMask)
+ 
+-static char *openurlcmd[] = { "/bin/sh", "-c",
+-	"xurls | dmenu -l 10 -w $WINDOWID | xargs -r open",
+-	"externalpipe", NULL };
++static char *openurlcmd[] = { "/bin/sh", "-c", "st-urlhandler -o", "externalpipe", NULL };
++static char *copyurlcmd[] = { "/bin/sh", "-c", "st-urlhandler -c", "externalpipe", NULL };
++static char *copyoutput[] = { "/bin/sh", "-c", "st-copyout", "externalpipe", NULL };
+ 
+ static char *setbgcolorcmd[] = { "/bin/sh", "-c",
+ 	"printf '\033]11;#008000\007'",
+@@ -266,7 +266,8 @@ static Shortcut shortcuts[] = {
+ 	{ TERMMOD,              XK_Y,           clippaste,       {.i =  0} },
+ 	{ ShiftMask,            XK_Insert,      clippaste,       {.i =  0} },
+ 	{ TERMMOD,              XK_Num_Lock,    numlock,         {.i =  0} },
+-	{ TERMMOD,              XK_U,           externalpipe,    { .v = openurlcmd } },
++	{ MODKEY|ShiftMask,     XK_U,           externalpipe,   {.v = openurlcmd } },
++	{ MODKEY|ShiftMask,     XK_Y,           externalpipe,   {.v = copyoutput } },
+ };
+ 
+ /*

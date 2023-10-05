@@ -4,46 +4,82 @@
     state: absent
     path: "{{ item }}"
   with_items:
-    - "{{ st_temp_directory }}"
-    - "{{ st_directory }}"
+    - "{{ st.build_dest }}"
+    - "{{ st.dest }}"
 
 - name: create a directory if it does not exist
   ansible.builtin.file:
-    path: "{{ st_temp_directory }}"
+    path: "{{ st.build_dest }}"
     state: directory
     mode: '0755'
 
 - name: checkout st
   git:
-    repo: https://github.com/bakkeby/st-flexipatch.git
-    dest: "{{ st_temp_directory }}"
+    repo: "{{ st.repo }}"
+    dest: "{{ st.build_dest }}"
 
 - name: add patches
-  shell: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ st_temp_directory }}/patches.def.h
-  with_items: "{{ st_patches }}"
+  shell: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ st.build_dest }}/patches.def.h
+  with_items: "{{ st.patches }}"
 
 - name: compile st
   command: make
   args:
-    chdir: "{{ st_temp_directory }}"
+    chdir: "{{ st.build_dest }}"
 
 - name: checkout flexipatch-finalizer
   git:
-    repo: https://github.com/bakkeby/flexipatch-finalizer.git
-    dest: "{{ flexipatch_finalizer_directory }}"
+    repo: "{{ flexipatch_finalizer.repo }}"
+    dest: "{{ flexipatch_finalizer.dest }}"
 
 - name: finalize st
-  command: "./flexipatch-finalizer.sh -r -d {{ st_temp_directory }} -o {{ st_directory }}"
+  command: "./flexipatch-finalizer.sh -r -d {{ st.build_dest }} -o {{ st.dest }}"
   args:
-    chdir: "{{ flexipatch_finalizer_directory }}"
+    chdir: "{{ flexipatch_finalizer.dest }}"
+
+- name: apply diff files
+  patch:
+    src: "{{ item }}"
+    basedir: "{{ st.dest }}"
+    strip: 1
+  with_items: "{{ st.diffs }}"
 
 - name: install st
   become: true
   command: make clean install
   args:
-    chdir: "{{ st_directory }}"
+    chdir: "{{ st.dest }}"
 
 - name: delete st temp directory
   ansible.builtin.file:
     state: absent
-    path: "{{ st_temp_directory }}"
+    path: "{{ st.build_dest }}"
+
+- name: add st-copy and st-url
+  block:
+  - name: checkout luke's st build
+    git:
+      repo: "{{ st.luke_repo }}"
+      dest: "{{ st.luke_build_dest }}"
+
+  - name: copy binaries
+    become: true
+    copy:
+      src: "{{ st.luke_build_dest }}/{{item}}"
+      dest: "/usr/local/bin/{{item}}"
+      remote_src: true
+    with_items: "{{ st.binaries }}"
+
+  - name: set permissions
+    become: true
+    ansible.builtin.file:
+      path: "/usr/local/bin/{{item}}"
+      owner: root
+      group: root
+      mode: '0755'
+    with_items: "{{ st.binaries }}"
+
+  - name: delete luke's st build
+    ansible.builtin.file:
+      state: absent
+      path: "{{ st.build_dest }}"

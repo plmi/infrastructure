@@ -7,4 +7,4 @@
   become: true
   ansible.builtin.file:
     state: absent
-    path: "{{ yay_directory }}"
+    path: "{{ yay.dest }}"

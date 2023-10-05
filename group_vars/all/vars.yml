@@ -1,88 +1,152 @@
-common_packages:
-  - aria2
-  - browserpass
-  - browserpass-chromium
-  - code
-  - dhcpcd 
-  - dunst
-  - eza
-  - flameshot
-  - git
-  - inetutils
-  - inotify-tools
-  - iperf3
-  - maim
-  - mpv
-  - neofetch
-  - net-tools
-  - netctl
-  - okular
-  - openssh
-  - openvpn
-  - p7zip
-  - pacman-contrib
-  - pass
-  - redshift
-  - speedtest-cli
-  - stow
-  - sxiv
-  - thunderbird
-  - tmux
-  - unzip
-  - wget
-  - xclip
-  - xorg-server
-  - xorg-xinit
-  - xorg-xsetroot
-  - xwallpaper
-  - yt-dlp
-  - zathura
-  - zathura-pdf-mupdf
-  - zip
-  - zoxide
-  - zsh
-  - zsh-autosuggestions
-  - zsh-syntax-highlighting
+common:
+  pacman:
+    - aria2
+    - bat
+    - browserpass
+    - browserpass-chromium
+    - code
+    - chromium
+    - dhcpcd
+    - dmenu
+    - dunst
+    - emacs
+    - eza
+    - feh
+    - flameshot
+    - fzf
+    - git
+    - inetutils
+    - inotify-tools
+    - iperf3
+    - less
+    - maim
+    - mpv
+    - neofetch
+    - net-tools
+    - netctl
+    - okular
+    - openssh
+    - openvpn
+    - p7zip
+    - pacman-contrib
+    - pass
+    - redshift
+    - ripgrep
+    - speedtest-cli
+    - stow
+    - sxiv
+    - thunderbird
+    - tmux
+    - unzip
+    - vim
+    - wget
+    - xclip
+    - xdotool
+    - xorg-server
+    - xorg-xwininfo
+    - xorg-xinit
+    - xorg-xsetroot
+    - xwallpaper
+    - yt-dlp
+    - zathura
+    - zathura-pdf-mupdf
+    - zip
+    - zoxide
+    - zsh
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
 
-blackarch_packages:
-  - nmap
-  - burpsuite
-  - metasploit
+yay:
+  dest: "/tmp/yay"
+  dependencies:
+    - git
+    - base-devel
 
-university_packages:
-  - gimp
-  - textlive-most
+man:
+  pacman:
+    - man-pages
+    - man-db
 
-yay_packages:
-  - nerd-fonts-jetbrains-mono 
-  - anki-official-binary-bundle
+fonts:
+  pacman:
+    - ttf-iosevka-nerd
+    - ttf-jetbrains-mono-nerd
 
-anki_dependencies:
-  - libxcb
-  - xcb-util-wm
-  - xcb-util-keysyms
-  - xcb-util-renderutil
+university:
+  pacman:
+    - gimp
+    - textlive-most
 
-yay_dependencies:
-  - git
-  - base-devel
+blackarch:
+  pacman:
+    - nmap
+    - burpsuite
+    - metasploit
+  strap_sh_url: https://blackarch.org/strap.sh
+  strap_sh_path: /tmp/strap.sh
 
-pyenv_dependencies:
-  - base-devel
-  - openssl
-  - zlib
-  - xz
-  - tk
+dwm:
+  repo: https://github.com/bakkeby/dwm-flexipatch.git
+  dest: "/home/{{ username }}/.local/src/dwm"
+  temp_dest: "/home/{{ username }}/.local/src/dwm.tmp"
+  patches:
+    - CENTER_PATCH
+    - BAR_STATUSCOLORS_PATCH
+    - FAKEFULLSCREEN_PATCH
+    - PERTAG_PATCH
+    - RENAMED_SCRATCHPADS_PATCH
+  diffs:
+    - base.config.diff
+    - statuscolors.config.diff
 
-dwm_patches:
-  - SCRATCHPAD_ALT_1_PATCH
-  - SWALLOW_PATCH
-  - BAR_SYSTRAY_PATCH
-  - FAKEFULLSCREEN_PATCH
-  - PERTAG_PATCH
+flexipatch_finalizer:
+  repo: https://github.com/bakkeby/flexipatch-finalizer.git
+  dest: "/home/{{ username }}/.local/src/flexipatch-finalizer"
 
-st_patches:
-  - BOLD_IS_NOT_BRIGHT_PATCH
+st:
+  repo: https://github.com/bakkeby/st-flexipatch.git
+  luke_repo: https://github.com/LukeSmithxyz/st.git
+  luke_build_dest: /tmp/st
+  build_dest: "/home/{{ username }}/.local/src/st.tmp"
+  dest: "/home/{{ username }}/.local/src/st"
+  patches:
+    - ALPHA_PATCH
+    - ALPHA_FOCUS_HIGHLIGHT_PATCH
+    - BOLD_IS_NOT_BRIGHT_PATCH
+    - CLIPBOARD_PATCH
+    - EXTERNALPIPE_PATCH
+    - SCROLLBACK_PATCH
+    - SCROLLBACK_MOUSE_ALTSCREEN_PATCH
+    - XRESOURCES_PATCH
+  binaries:
+    - st-copyout
+    - st-urlhandler
+  diffs:
+    - theme.config.diff
+    - st-commands.config.diff
+
+dwmblocks:
+  repository: https://github.com/UtkarshVerma/dwmblocks-async.git
+  dest: "/home/{{ username }}/.local/src/dwmblocks-async"
+  blocks:
+    dest: "/usr/local/bin/"
+    glob1: "/home/{{ username }}/dotfiles/x11/bin/sb-*"
+  diffs:
+    - dwmblocks.config.diff
+
+tabbed:
+  repository: https://github.com/bakkeby/tabbed-flexipatch.git
+  dest: "/home/{{ username }}/.local/src/tabbed"
+  build_dest: "/tmp/tabbed"
+  patches:
+    - BAR_HEIGHT_PATCH
+    - XRESOURCES_PATCH
+  diffs:
+    - ''
+
+entr:
+  repository: https://github.com/eradman/entr.git
+  dest: "/home/{{ username }}/.local/src/entr"
 
 docker:
   group: docker
@@ -108,16 +172,36 @@ ssh:
     - hostname: gaia
       ip: 192.168.8.101
 
-timezone: Europe/Berlin
+anki:
+  aur:
+    - anki-official-binary-bundle
+  dependencies:
+    - libxcb
+    - xcb-util-wm
+    - xcb-util-keysyms
+    - xcb-util-renderutil
+
+pyenv:
+  repo: https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer
+  dest: "/home/{{ username }}/.pyenv"
+  dependencies: 
+    - base-devel
+    - openssl
+    - zlib
+    - xz
+    - tk
+
+bat:
+  temp_dest: /tmp/bat
+
+grub:
+  config: /etc/default/grub
+
+dotfiles:
+  repo: https://github.com/plmi/dotfiles.git
+  dest: "/home/{{ username }}/dotfiles"
+
 username: michael
+timezone: Europe/Berlin
 shell: /usr/bin/zsh
-yay_directory: "/tmp/yay"
-pyenv_directory: "/home/{{ username }}/.pyenv"
-st_temp_directory: "/home/{{ username }}/.local/src/st.tmp"
-st_directory: "/home/{{ username }}/.local/src/st"
-dotfiles_directory: "/home/{{ username }}/dotfiles"
-dwm_directory: "/home/{{ username }}/.local/src/dwm"
-dwm_temp_directory: "/home/{{ username }}/.local/src/dwm.tmp"
 public_key_name: "homeserver"
-grub_config: /etc/default/grub
-flexipatch_finalizer_directory: "/home/{{ username }}/.local/src/flexipatch-finalizer"

@@ -1,0 +1,16 @@
+---
+- name: checkout entr repository
+  git:
+    repo: https://github.com/eradman/entr.git
+    dest: "{{ entr.dest }}"
+
+- name: configure
+  command: ./configure
+  args:
+    chdir: "{{ entr.dest }}"
+
+- name: install
+  become: true
+  command: make install
+  args:
+    chdir: "{{ entr.dest }}"
