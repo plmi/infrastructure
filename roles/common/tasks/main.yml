@@ -20,6 +20,7 @@
 - include_tasks: dwm.yml
 - include_tasks: dwmblocks.yml
 - include_tasks: tabbed.yml
+- include_tasks: dmenu.yml
 - include_tasks: entr.yml
 - include_tasks: docker.yml
   args:

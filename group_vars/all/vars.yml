@@ -7,7 +7,6 @@ common:
     - code
     - chromium
     - dhcpcd
-    - dmenu
     - dunst
     - emacs
     - eza
@@ -45,6 +44,7 @@ common:
     - xorg-server
     - xorg-xwininfo
     - xorg-xinit
+    - xorg-xrandr
     - xorg-xsetroot
     - xwallpaper
     - yt-dlp
@@ -124,6 +124,21 @@ st:
   diffs:
     - theme.config.diff
     - st-commands.config.diff
+
+dmenu:
+  repo: https://github.com/bakkeby/dmenu-flexipatch.git
+  build_dest: "/home/{{ username }}/.local/src/dmenu.tmp"
+  dest: "/home/{{ username }}/.local/src/dmenu"
+  patches:
+    - BORDER_PATCH
+    - CENTER_PATCH
+    - FUZZYMATCH_PATCH
+    - GRID_PATCH
+    - INSTANT_PATCH
+    - HIGHPRIORITY_PATCH
+    - XRESOURCES_PATCH
+  diffs:
+    - dmenu.config.diff
 
 dwmblocks:
   repository: https://github.com/UtkarshVerma/dwmblocks-async.git

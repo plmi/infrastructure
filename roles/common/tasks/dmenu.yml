@@ -1,0 +1,56 @@
+---
+- name: delete directories
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ dmenu.build_dest }}"
+    - "{{ dmenu.dest }}"
+
+- name: create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ dmenu.build_dest }}"
+    state: directory
+    mode: '0755'
+
+- name: checkout dmenu
+  git:
+    repo: "{{ dmenu.repo }}"
+    dest: "{{ dmenu.build_dest }}"
+
+- name: add patches
+  shell: sed -i "s/{{ item }} 0/{{ item }} 1/" {{ dmenu.build_dest }}/patches.def.h
+  with_items: "{{ dmenu.patches }}"
+
+- name: compile dmenu
+  command: make
+  args:
+    chdir: "{{ dmenu.build_dest }}"
+
+- name: checkout flexipatch-finalizer
+  git:
+    repo: "{{ flexipatch_finalizer.repo }}"
+    dest: "{{ flexipatch_finalizer.dest }}"
+
+- name: finalize dmenu
+  command: "./flexipatch-finalizer.sh -r -d {{ dmenu.build_dest }} -o {{ dmenu.dest }}"
+  args:
+    chdir: "{{ flexipatch_finalizer.dest }}"
+
+- name: apply diff files
+  patch:
+    src: "{{ item }}"
+    basedir: "{{ dmenu.dest }}"
+    strip: 1
+  with_items: "{{ dmenu.diffs }}"
+
+- name: install dmenu
+  become: true
+  command: make clean install
+  args:
+    chdir: "{{ dmenu.dest }}"
+
+- name: delete dmenu temp directory
+  ansible.builtin.file:
+    state: absent
+    path: "{{ dmenu.build_dest }}"
