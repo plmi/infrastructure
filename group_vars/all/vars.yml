@@ -1,10 +1,10 @@
 common:
   pacman:
+    - alsa-utils
     - aria2
     - bat
     - browserpass
     - browserpass-chromium
-    - code
     - chromium
     - dhcpcd
     - dunst
@@ -12,6 +12,7 @@ common:
     - eza
     - feh
     - flameshot
+    - freerdp
     - fzf
     - git
     - inetutils
@@ -23,6 +24,7 @@ common:
     - neofetch
     - net-tools
     - netctl
+    - nfs-utils
     - okular
     - openssh
     - openvpn
@@ -42,10 +44,11 @@ common:
     - xclip
     - xdotool
     - xorg-server
-    - xorg-xwininfo
+    - xorg-xev
     - xorg-xinit
     - xorg-xrandr
     - xorg-xsetroot
+    - xorg-xwininfo
     - xwallpaper
     - yt-dlp
     - zathura
@@ -61,6 +64,8 @@ yay:
   dependencies:
     - git
     - base-devel
+  packages:
+    - visual-studio-code-bin
 
 man:
   pacman:
@@ -71,6 +76,12 @@ fonts:
   pacman:
     - ttf-iosevka-nerd
     - ttf-jetbrains-mono-nerd
+
+printer:
+  pacman:
+    - cups
+    - avahi
+    - hplip
 
 university:
   pacman:
