@@ -22,6 +22,7 @@ common:
     - maim
     - mpv
     - neofetch
+    - neovim
     - net-tools
     - netctl
     - nfs-utils
@@ -66,6 +67,7 @@ yay:
     - base-devel
   packages:
     - visual-studio-code-bin
+    - nvm
 
 man:
   pacman:
@@ -87,6 +89,7 @@ university:
   pacman:
     - gimp
     - textlive-most
+    - texlive-binextra
 
 blackarch:
   pacman:
