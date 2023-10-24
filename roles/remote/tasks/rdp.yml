@@ -1,0 +1,21 @@
+---
+- name: enable service xrdp
+  become: true
+  ansible.builtin.systemd_service:
+    name: xrdp
+    enabled: true
+
+- name: start service xrdp
+  become: true
+  ansible.builtin.systemd_service:
+    name: xrdp
+    state: restarted
+
+- name: replace xrdp.ini
+  become: true
+  template:
+    src: xrdp.jinja
+    dest: "/etc/xrdp/xrdp.ini"
+    owner: root
+    group: root
+    mode: 0644

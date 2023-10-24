@@ -68,6 +68,7 @@ yay:
   packages:
     - visual-studio-code-bin
     - nvm
+    - xrdp
 
 man:
   pacman:
@@ -112,6 +113,7 @@ dwm:
   diffs:
     - base.config.diff
     - statuscolors.config.diff
+    - refactor.config.diff
 
 flexipatch_finalizer:
   repo: https://github.com/bakkeby/flexipatch-finalizer.git

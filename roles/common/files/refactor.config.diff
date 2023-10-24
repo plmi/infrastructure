@@ -1,0 +1,50 @@
+diff --git a/config.h b/config.h
+index 3efdea6..d73f722 100644
+--- a/config.h
++++ b/config.h
+@@ -14,8 +14,8 @@ static const int statusmon               = 'A';
+ static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
+ static int tiledindicatortype            = INDICATOR_NONE;
+ static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
+-static const char *fonts[]               = { "monospace:size=10" };
+-static const char dmenufont[]            = "monospace:size=10";
++static const char *fonts[]               = { "JetBrainsMono Nerd Font Mono:size=10" };
++static const char dmenufont[]            = "JetBrainsMono Nerd Font Mono:size=10";
+ 
+ static char c000000[]                    = "#000000"; // placeholder value
+ 
+@@ -120,7 +120,7 @@ static char *colors[][ColCount] = {
+  */
+ static char *tagicons[][NUMTAGS] =
+ {
+-	[DEFAULT_TAGS]        = { "base", "web", "term", "mail" },
++	[DEFAULT_TAGS]        = { "1", "2", "3", "4" },
+ 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D" },
+ 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>" },
+ };
+@@ -203,7 +203,7 @@ static const Layout layouts[] = {
+ 
+ 
+ /* key definitions */
+-#define MODKEY Mod1Mask
++#define MODKEY Mod4Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+@@ -217,14 +217,12 @@ static const Layout layouts[] = {
+ 
+ /* commands */
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor,
+-	                                "-nf", normfgcolor, "-sb", selbgcolor, "-sf", selfgcolor, NULL };
++static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-hp", "chromium,scripts" };
+ static const char *termcmd[]  = { "st", NULL };
+-static const char *tmuxcmd[] = { "urxvtc", "-title", "tmux", "-e", "tmux", "-f", "/home/michael/.tmux.conf", NULL };
++static const char *tmuxcmd[] = { "st", "-e", "tmux", NULL };
+ static const char *lockcmd[] = { "xautolock", "-locknow", NULL };
+ static const char *rebootcmd[] = { "systemctl", "reboot", NULL };
+ static const char *shutcmd[] = { "systemctl", "poweroff", NULL };
+-//static const char *scratchpadcmd[] = { "st", "-t", "scratchpad", "-g", "120x34", NULL };
+ static const char *screenshotcmd[] = { "screenshot.sh", "-s", NULL };
+ static const char *scratchpadcmd[] = {"s", "st", "-n", "scratchpad", "-g", "120x34", NULL};
+ 

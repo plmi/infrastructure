@@ -6,4 +6,4 @@
     - role: network
     - role: ssh
     - role: dotfiles
-    - role: vnc
+    - role: remote
