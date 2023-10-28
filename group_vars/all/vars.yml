@@ -3,6 +3,7 @@ common:
     - alsa-utils
     - aria2
     - bat
+    - bind-utils
     - browserpass
     - browserpass-chromium
     - chromium
